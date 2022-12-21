@@ -1,6 +1,6 @@
 ---
 title: "Joining Review Exercises"
-author: "Your Name Here"
+author: "Piper Macke"
 date: "`r format(Sys.time(), '%B %d, %Y')`"
 format:
   html:
@@ -40,6 +40,10 @@ Join together the election results and urban/suburban/rural tables above, and th
 
 ```{r}
 
+VA_trumpvote <- inner_join(counties_rural_urban_suburban, counties_elexresults) %>% 
+  filter(state_code == "VA") %>% 
+  group_by(rural_urban) %>% 
+  summarise(mean_pct_trump = mean(pct_r_2020))
 
 
 
@@ -49,7 +53,8 @@ Take the grouped dataset, and create a column chart using ggplot to display it
 
 ```{r}
 
-
+ggplot(VA_trumpvote, aes(x = rural_urban, y = mean_pct_trump)) +
+  geom_col()
 
 
 ```
@@ -61,15 +66,22 @@ Now using the joined dataset, come up with two groupings you find interesting or
 ```{r}
 
 
+VA_trumpvote <- inner_join(counties_rural_urban_suburban, counties_elexresults) %>% 
+  filter(state_code == "VA") %>% 
+  group_by(rural_urban) %>% 
+  summarise(mean_pct_trump = mean(pct_r_2020))
 
-
+VA_trumpvote
 ```
 
 
 ```{r}
+elex_demographics <- inner_join(counties_elexresults, counties_demographics, by = "geoid")
+college_votes <- elex_demographics %>% 
+  filter(state_code == "VA") %>% 
+  group_by(pct_ed_college_all_abovebelow_natl) %>% 
+  summarise(mean(democrat_2020))
 
-
-
-
+elex_demographics
 
 ```
